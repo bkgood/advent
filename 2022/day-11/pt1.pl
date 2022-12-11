@@ -3,8 +3,6 @@
 use v5.36.0;
 use warnings;
 
-use constant PT2 => 1;
-
 state @monkies;
 state $divisor_prod = 1;
 
