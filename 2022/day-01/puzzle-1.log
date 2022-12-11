@@ -1,0 +1,8 @@
+wgood@Williams-Air aoc-2022 % perl -nE 'chomp;if (!$_) { $sum>$most and $most=$sum; $sum=0; next } $sum+=$_; END{say $most}' <puzzle-1.in
+67622
+wgood@Williams-Air aoc-2022 % perl -nE 'chomp;if (!$_) { $sum>$most and $sum < 67622 and $most=$sum; $sum=0; next } $sum+=$_; END{say $most}' <puzzle-1.in
+67492
+wgood@Williams-Air aoc-2022 % perl -nE 'chomp;if (!$_) { $sum>$most and $sum < 67492 and $most=$sum; $sum=0; next } $sum+=$_; END{say $most}' <puzzle-1.in
+66377
+wgood@Williams-Air aoc-2022 % echo $(( 67622 + 67492 + 66377 ))
+201491
