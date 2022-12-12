@@ -47,7 +47,7 @@ fn parse_input() -> io::Result<Vec<Monkey>> {
     let mut monkies: Vec<Monkey> = Vec::new();
 
     while stdin.read_line(&mut buf)? > 0 {
-        if buf.ends_with("\n") {
+        if buf.ends_with('\n') {
             buf.truncate(buf.len() - 1);
         }
 
@@ -123,7 +123,7 @@ fn round(monkies: &mut Vec<Monkey>, trunc: i64) {
             monkey.inspected += 1;
             let item = monkey.op.apply(monkey.items.remove(0)) % trunc;
 
-            let target = monkey.targets[if item % monkey.divisor == 0 { 1 } else { 0 }];
+            let target = monkey.targets[usize::from(item % monkey.divisor == 0)];
 
             if target < i {
                 before[target].items.push(item);
