@@ -134,6 +134,29 @@ fn round(monkies: &mut Vec<Monkey>, trunc: i64) {
     }
 }
 
+fn monkey_business(monkies: &[Monkey]) -> i64 {
+    if monkies.len() < 2 { panic!("there are supposed to be more monkies.") }
+
+    let mut selection = [&monkies[0], &monkies[1]];
+
+    let reorder = |selection: &mut [&Monkey; 2]| {
+        if selection[0].inspected > selection[1].inspected {
+            selection.reverse();
+        }
+    };
+
+    reorder(&mut selection);
+
+    for monkey in monkies {
+        if monkey.inspected > selection[0].inspected {
+            selection[0] = monkey;
+            reorder(&mut selection);
+        }
+    }
+
+    selection[0].inspected * selection[1].inspected
+}
+
 fn main() -> io::Result<()> {
     let mut monkies = parse_input()?;
 
@@ -148,12 +171,7 @@ fn main() -> io::Result<()> {
         round(&mut monkies, trunc);
     }
 
-    let mut sorted = monkies.to_owned();
-    sorted.sort_unstable_by_key(|x| x.inspected);
-    let mut prod = sorted[sorted.len()-1].inspected;
-    prod *= sorted[sorted.len()-2].inspected;
-
-    println!("{}", prod);
+    println!("{}", monkey_business(&monkies));
 
     Ok(())
 }
