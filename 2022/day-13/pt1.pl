@@ -73,8 +73,6 @@ sub ok {
 }
 
 sub pair_cmp {
-    my ($one, $two) = @_;
-
     my $ok = ok(@_);
 
     if (!defined $ok) {
