@@ -119,9 +119,9 @@ fn round(monkies: &mut Vec<Monkey>, trunc: i64) {
 
         let (monkey, after) = rest.split_at_mut(1);
         let monkey = &mut monkey[0];
-        while !monkey.items.is_empty() {
+        for item in monkey.items.drain(..) {
             monkey.inspected += 1;
-            let item = monkey.op.apply(monkey.items.remove(0)) % trunc;
+            let item = monkey.op.apply(item) % trunc;
 
             let target = monkey.targets[usize::from(item % monkey.divisor == 0)];
 
