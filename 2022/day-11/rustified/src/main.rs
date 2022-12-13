@@ -1,6 +1,6 @@
 use std::io;
 
-#[derive(Clone,Debug)]
+#[derive(Clone, Debug)]
 struct Monkey {
     op: Op,
     items: Vec<i64>,
@@ -21,7 +21,7 @@ impl Default for Monkey {
     }
 }
 
-#[derive(Clone,Debug)]
+#[derive(Clone, Debug)]
 enum Op {
     None,
     AddImmOp(i64),
@@ -55,7 +55,7 @@ fn parse_input() -> io::Result<Vec<Monkey>> {
             monkies.push(Monkey::default())
         } else if buf.starts_with("  Starting items: ") {
             let len = monkies.len();
-            let monkey = &mut monkies[len-1];
+            let monkey = &mut monkies[len - 1];
 
             let mut sub: &str = buf.as_str();
 
@@ -65,46 +65,56 @@ fn parse_input() -> io::Result<Vec<Monkey>> {
                     None => sub.len(),
                 };
 
-                monkey.items.push(sub[next..until].parse::<i64>().expect("parse item"));
+                monkey
+                    .items
+                    .push(sub[next..until].parse::<i64>().expect("parse item"));
 
                 sub = &sub[until..];
             }
         } else if buf.starts_with("  Operation: new = old ") {
             let len = monkies.len();
-            let monkey = &mut monkies[len-1];
+            let monkey = &mut monkies[len - 1];
             if buf.contains("* old") {
                 monkey.op = Op::SquareOp;
             } else {
-                let imm: i64 = buf[(buf.rfind(' ').unwrap() + 1)..].parse().expect("can't parse imm");
+                let imm: i64 = buf[(buf.rfind(' ').unwrap() + 1)..]
+                    .parse()
+                    .expect("can't parse imm");
 
                 if buf.contains('*') {
                     monkey.op = Op::MultImmOp(imm);
                 } else if buf.contains('+') {
                     monkey.op = Op::AddImmOp(imm);
                 } else {
-                    return Err(
-                        io::Error::new(
-                            io::ErrorKind::Other,
-                            "can't find op: ".to_owned() + &buf));
+                    return Err(io::Error::new(
+                        io::ErrorKind::Other,
+                        "can't find op: ".to_owned() + &buf,
+                    ));
                 }
             }
         } else if buf.starts_with("  Test: divisible by ") {
             let len = monkies.len();
-            let monkey = &mut monkies[len-1];
-            monkey.divisor = buf[(buf.rfind(' ').unwrap() + 1)..].parse().expect("can't parse divisor");
+            let monkey = &mut monkies[len - 1];
+            monkey.divisor = buf[(buf.rfind(' ').unwrap() + 1)..]
+                .parse()
+                .expect("can't parse divisor");
         } else if buf.starts_with("    If true: throw to monkey ") {
             let len = monkies.len();
-            let monkey = &mut monkies[len-1];
-            monkey.targets[1] = buf[(buf.rfind(' ').unwrap() + 1)..].parse().expect("can't parse true");
+            let monkey = &mut monkies[len - 1];
+            monkey.targets[1] = buf[(buf.rfind(' ').unwrap() + 1)..]
+                .parse()
+                .expect("can't parse true");
         } else if buf.starts_with("    If false: throw to monkey ") {
             let len = monkies.len();
-            let monkey = &mut monkies[len-1];
-            monkey.targets[0] = buf[(buf.rfind(' ').unwrap() + 1)..].parse().expect("can't parse false");
+            let monkey = &mut monkies[len - 1];
+            monkey.targets[0] = buf[(buf.rfind(' ').unwrap() + 1)..]
+                .parse()
+                .expect("can't parse false");
         } else if !buf.is_empty() {
-            return Err(
-                io::Error::new(
-                    io::ErrorKind::Other,
-                    "don't understand line: ".to_owned() + &buf));
+            return Err(io::Error::new(
+                io::ErrorKind::Other,
+                "don't understand line: ".to_owned() + &buf,
+            ));
         }
 
         buf.clear();
@@ -135,7 +145,9 @@ fn round(monkies: &mut Vec<Monkey>, trunc: i64) {
 }
 
 fn monkey_business(monkies: &[Monkey]) -> i64 {
-    if monkies.len() < 2 { panic!("there are supposed to be more monkies.") }
+    if monkies.len() < 2 {
+        panic!("there are supposed to be more monkies.")
+    }
 
     let mut selection = [&monkies[0], &monkies[1]];
 
