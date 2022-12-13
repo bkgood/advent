@@ -149,7 +149,7 @@ fn main() -> io::Result<()> {
     }
 
     let mut sorted = monkies.to_owned();
-    sorted.sort_by(|a, b| a.inspected.cmp(&b.inspected));
+    sorted.sort_unstable_by_key(|x| x.inspected);
     let mut prod = sorted[sorted.len()-1].inspected;
     prod *= sorted[sorted.len()-2].inspected;
 
