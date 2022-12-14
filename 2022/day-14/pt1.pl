@@ -86,7 +86,7 @@ sub spawn_sand {
 
         if ($stopped) {
             $scan[$pos[1]][$pos[0]] = 'o';
-            return 1;
+            return \@pos;
         }
     }
 
@@ -94,10 +94,74 @@ sub spawn_sand {
     return 0;
 }
 
+sub clear {
+    for my $row (@scan) {
+        $row->@* = map { $_ && $_ eq '#' ? '#' : undef } $row->@*;
+    }
+}
+
+sub add_floor {
+    my ($floor_y) = @_;
+
+    my $max_x = $min_x;
+    for my $row (@scan) {
+        $max_x = max($max_x, $row->$#*);
+    }
+
+    $scan[$floor_y] = [];
+    $scan[$floor_y][$_] = '#' for $min_x .. $max_x;
+}
+
+sub grow_floor {
+    my ($floor_y) = @_;
+
+    my $floor = $scan[$floor_y];
+
+    my $begin = 0;
+    $begin++ while !$floor->[$begin];
+    my $end = $begin;
+    $end++ while $floor->[$end];
+
+    my $add = $end - $begin;
+
+    $floor->[$_] = '#' for ($begin-$add)..$begin;
+    $floor->[$_] = '#' for $end..($end + $add);
+}
+
 END {
     my $i = 0;
 
+    show;
     while (spawn_sand) { $i++; }
+    show;
 
     say "pt1: $i";
+    clear;
+
+    my $floor_y = $#scan + 2;
+    add_floor($floor_y);
+    #show();
+
+    if (1) {
+        my $spawned = 0;
+        while (1) {
+            my $stop_pos = spawn_sand();
+
+            if (!$stop_pos) {
+                grow_floor($floor_y);
+                redo;
+            }
+
+            $spawned++;
+
+            if ($stop_pos->[0] == 500 && $stop_pos->[1] == 0) {
+                say "pt2: $spawned";
+                last;
+            }
+
+            #say $spawned;
+            # this is very slow.
+            #show();
+        }
+    }
 }
