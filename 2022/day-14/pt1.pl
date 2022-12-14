@@ -64,7 +64,7 @@ sub show {
     }
 }
 
-# return true if sand stops in some decent place, false if it falls into the abyss
+# return stop coords if sand stops in some decent place, false if it falls into the abyss
 sub spawn_sand {
     my @pos = (500, 0);
 
