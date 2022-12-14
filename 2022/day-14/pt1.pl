@@ -41,7 +41,7 @@ while (my $point = shift @points) {
     }
 }
 
-sub max { my $x = shift; $x = $_ > $x ? $_ : $x while shift; $x }
+sub max { my $x = shift; $x = $_ > $x ? $_ : $x while $_ = shift; $x }
 
 sub show {
     my $max_x = $min_x;
