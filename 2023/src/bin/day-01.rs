@@ -8,53 +8,61 @@ fn main() -> io::Result<()> {
     .map(|x| x.as_bytes())
     .collect();
 
-    let mut buffer = String::new();
+    let mut buf = String::new();
     let stdin = io::stdin();
     let mut handle = stdin.lock();
 
     let mut sum = 0i32;
 
     loop {
-        if handle.read_line(&mut buffer)? == 0 {
+        if handle.read_line(&mut buf)? == 0 {
             break;
         }
 
-        let bs = buffer.as_bytes();
+        let bs = buf.as_bytes();
 
-        'potato: for i in 0..bs.len() {
-            let c = bs[i];
-            if c >= b'0' && c <= b'9' {
-                sum += 10 * (c - b'0') as i32;
+        'first: for i in 0..bs.len() {
+            if let Some(c) = digit(bs[i]) {
+                sum += 10 * c;
                 break;
             }
 
-            for j in 0..words.len() {
-                if bs[i..].starts_with(words[j]) {
+            for (j, word) in words.iter().enumerate() {
+                if bs[i..].starts_with(word) {
                     sum += 10 * (j as i32);
-                    break 'potato;
+                    break 'first;
                 }
             }
         }
 
-        'potato: for i in (0..bs.len()).rev() {
-            let c = bs[i];
-            if c >= b'0' && c <= b'9' {
-                sum += (c - b'0') as i32;
+        'last: for i in (0..bs.len()).rev() {
+            if let Some(c) = digit(bs[i]) {
+                sum += c;
                 break;
             }
 
-            for j in 0..words.len() {
-                if bs[i..].starts_with(words[j]) {
+            for (j, word) in words.iter().enumerate() {
+                if bs[i..].starts_with(word) {
                     sum += j as i32;
-                    break 'potato;
+                    break 'last;
                 }
             }
         }
 
-        buffer.clear();
+        buf.clear();
     }
 
     println!("{}", sum);
 
     Ok(())
+}
+
+fn digit(b: u8) -> Option<i32> {
+    let digits = b'0'..=b'9';
+
+    if digits.contains(&b) {
+        Some((b - b'0') as i32)
+    } else {
+        None
+    }
 }
