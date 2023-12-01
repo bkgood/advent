@@ -1,12 +1,9 @@
 use std::io::{self, BufRead};
 
 fn main() -> io::Result<()> {
-    let words: Vec<&[u8]> = vec![
+    let words = [
         "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-    ]
-    .into_iter()
-    .map(|x| x.as_bytes())
-    .collect();
+    ];
 
     let mut buf = String::new();
     let stdin = io::stdin();
@@ -28,7 +25,7 @@ fn main() -> io::Result<()> {
             }
 
             for (j, word) in words.iter().enumerate() {
-                if bs[i..].starts_with(word) {
+                if bs[i..].starts_with(word.as_bytes()) {
                     sum += 10 * (j as i32);
                     break 'first;
                 }
@@ -42,7 +39,7 @@ fn main() -> io::Result<()> {
             }
 
             for (j, word) in words.iter().enumerate() {
-                if bs[i..].starts_with(word) {
+                if bs[i..].starts_with(word.as_bytes()) {
                     sum += j as i32;
                     break 'last;
                 }
