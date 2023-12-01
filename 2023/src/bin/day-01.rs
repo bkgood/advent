@@ -58,9 +58,7 @@ fn main() -> io::Result<()> {
 }
 
 fn digit(b: u8) -> Option<i32> {
-    let digits = b'0'..=b'9';
-
-    if digits.contains(&b) {
+    if b.is_ascii_digit() {
         Some((b - b'0') as i32)
     } else {
         None
