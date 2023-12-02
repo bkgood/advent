@@ -5,18 +5,13 @@ fn main() -> io::Result<()> {
         "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
     ];
 
-    let mut buf = String::new();
     let stdin = io::stdin();
-    let mut handle = stdin.lock();
+    let handle = stdin.lock();
 
     let mut sum = 0i32;
 
-    loop {
-        if handle.read_line(&mut buf)? == 0 {
-            break;
-        }
-
-        let bs = buf.as_bytes();
+    for line in handle.lines().map(|x| x.unwrap()) {
+        let bs = line.as_bytes();
 
         'first: for i in 0..bs.len() {
             if let Some(c) = digit(bs[i]) {
@@ -45,8 +40,6 @@ fn main() -> io::Result<()> {
                 }
             }
         }
-
-        buf.clear();
     }
 
     println!("{}", sum);
