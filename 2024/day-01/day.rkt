@@ -17,9 +17,7 @@
 
 (define (parse in)
   (define lines
-    (for/list ([line (in-lines in 'any)]
-               #:do [(define trimmed (string-trim line))]
-               #:unless (string-empty? trimmed))
+    (for/list ([line (in-lines in 'any)])
       (for/list ([num (in-list (string-split line))])
         (string->number num))))
   (for/fold ([lists (cons empty-treelist empty-treelist)])
