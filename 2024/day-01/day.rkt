@@ -20,7 +20,7 @@
     (for/list ([line (in-lines in 'any)]
                #:do [(define trimmed (string-trim line))]
                #:unless (string-empty? trimmed))
-      (for/list ([num (string-split line)])
+      (for/list ([num (in-list (string-split line))])
         (string->number num))))
   (for/fold ([lists (cons empty-treelist empty-treelist)])
             ([l (in-list lines)])
