@@ -6,10 +6,9 @@
   )
 
 (define repeat-matcher
-  (let ([lookup (make-hash)])
-    (lambda (n)
-      (hash-ref! lookup n
-                 (thunk (pregexp (format "^([0-9]{~a})\\1+$" n)))))))
+  (let ([lookup (for/vector ([i (in-inclusive-range 1 10)])
+                  (pregexp (format "^([0-9]{~a})\\1+$" i)))])
+    (lambda (n) (vector-ref lookup (sub1 n)))))
 
 (define (num-digits i)
   (truncate (add1 (log i 10))))
@@ -43,8 +42,9 @@
              #:when (is-repeated-sequence? i))
     i))
 
-(call-with-input-string ex sum-duplicated-sequence-numbers)
-(call-with-input-file "in" sum-duplicated-sequence-numbers)
+(module+ main
+  (call-with-input-string ex sum-duplicated-sequence-numbers)
+  (call-with-input-file "in" sum-duplicated-sequence-numbers)
 
-(call-with-input-string ex sum-repeated-sequence-numbers)
-(call-with-input-file "in" sum-repeated-sequence-numbers)
+  (call-with-input-string ex sum-repeated-sequence-numbers)
+  (call-with-input-file "in" sum-repeated-sequence-numbers))
