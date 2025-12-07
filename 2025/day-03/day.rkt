@@ -90,10 +90,10 @@
         [else
          ; iterate through all of cands, choose best one
          (for/fold ([best #f])
-                   ([cand (in-list cands)]
-                    #:do [(define c (prepend-digit
-                                     (loop (rest cand) (sub1 still-need))
-                                     (car (first cand))))])
+                   ([cand (in-list cands)])
+           (define c (prepend-digit
+                      (loop (rest cand) (sub1 still-need))
+                      (car (first cand))))
            (if (or (not best) (> c best)) c best))]))))
 
 (define (pt2 in)
